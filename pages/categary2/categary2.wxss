@@ -1,0 +1,35 @@
+/* pages/categary/categary.wxss */
+page{
+  height: 100%;
+}
+.tabbar_wrap{
+  height:100rpx;
+  width:100%;
+  position: fixed;
+  top:0;
+  left:0;
+}
+.scroll-view_H{
+  white-space: nowrap;
+  width:100%;
+}
+
+.tabbar_wrap .scroll-view_H .scroll-item{
+  margin:0 20rpx;
+  height:80rpx;
+  display: inline-block;
+  line-height: 80rpx;
+}
+.cur{
+  border-bottom: 8rpx solid orange;
+}
+.sort_ctn{
+  position: fixed;
+  top:100rpx;
+  bottom: 0;
+  width:100%;
+  /* background:#f2f2f2; */
+}
+.scroll-view_Y{
+  height:100%;
+}

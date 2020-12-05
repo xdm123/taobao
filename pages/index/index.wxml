@@ -1,0 +1,54 @@
+<view >
+  <!--顶部分类 -->
+  <view class="father">
+     <!-- 轮播图 -->
+     <view class="banner_wrap">
+      <swiper class="swiper" indicator-dots="true" autoplay="true" interval="3000" duration="1000" circular="true">
+        <navigator wx:for="{{banner_data}}" wx:key="*this" url="{{item.url}}">
+          <swiper-item>
+            <image src="{{item.pic}}" class="banner-image" />
+          </swiper-item>
+        </navigator>
+      </swiper>
+    </view>
+    <image class="index_bg" src="../../img/index_bg.jpg"></image>
+  </view>
+
+  <!-- 主题导航栏 -->
+  <view class="swiper_wrap">
+    <swiper  class="type_swiper"
+    indicator-color="rgba(255, 255, 255, .5)"
+    indicator-active-color="#F7F7F7">
+      <swiper-item>
+        <view class="index_type" wx:for='{{swiperData}}' wx:key="index">
+          <view class="itempic">
+            <image src="{{item.img}}"></image>
+          </view>
+          <view>{{item.itemtitle}}</view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+  <!-- 平台导航类 -->
+  <view class="title_wrap">
+    <Tabs id="floatMirror" class="{{isShowFloat?'theFixed':'reset'}}" binditemChange="handleItemChange"></Tabs>
+  </view>
+  <!-- 内容 -->
+  <view class="{{isShowFloat?'D-margin-top':'S-margin-top'}}">
+    <navigator wx:for='{{goodsList}}' wx:key='index' class='goodslistwrap'
+      url="/pages/detail/detail?item_id={{item.item_id}}&platform_type={{last_title_index}}&others={{item.others}}">
+      <view class='goods_pic_wrap'>
+        <image lazy-load="true" class='goods_pic' src="{{item.pict_url}}"></image>
+      </view>
+      <view class='goods_title'>{{item.title}}</view>
+      <view class="goods_shopname">{{item.nick}}</view>
+      <view class="goods_price">
+        <view>原价:</view>
+        <view>￥{{item.reserve_price}}</view>
+        <view class='final_price'>券后价:</view>
+        <view>￥{{item.zk_final_price}}</view>
+      </view>
+      <view class="goods_type">已售：{{item.volume}}</view>
+    </navigator>
+  </view>
+</view>

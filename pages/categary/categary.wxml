@@ -1,0 +1,34 @@
+<view>
+  <button bindtap="clickTb" size="mini">淘宝</button>
+  <button bindtap="clickPdd" size="mini">拼多多</button>
+  <button bindtap="clickJd" size="mini">京东</button>
+</view>
+<view class="tabbar_wrap">
+  <scroll-view class="scroll-view_H" scroll-x='true' scroll-with-animation='true' enable-back-to-top='true'
+    scroll-into-view='{{tabid}}'>
+    <view class="scroll-item {{index == tabindex ? 'cur' : ''}}" wx:for='{{tabBarData}}' id='tab_{{index}}'
+      bindscrolltolower='{{loaddata}}' data-tabid='tab_{{index}}' wx:key="index" data-index='{{index}}'
+      data-id="{{item.id}}" bindtap="tabbarClick">
+      {{item.name}}
+    </view>
+  </scroll-view>
+</view>
+<view class="sort_ctn">
+
+  <scroll-view class="scroll-view_Y" scroll-y='true' bindscrolltolower='loaddata'>
+    <view wx:for='{{goodsList}}' wx:key='index' class='goodslistwrap'>
+      <view class='goods_pic_wrap'>
+        <image lazy-load="true" class='goods_pic' src="{{item.pict_url}}"></image>
+      </view>
+      <view class='goods_title'>{{item.title}}</view>
+      <view class="goods_shopname">{{item.nick}}</view>
+      <view class="goods_price">
+        <view>原价:</view>
+        <view>￥{{item.reserve_price}}</view>
+        <view class='final_price'>券后价:</view>
+        <view>￥{{item.zk_final_price}}</view>
+      </view>
+      <view class="goods_type">已售：{{item.volume}}</view>
+    </view>
+  </scroll-view>
+</view>

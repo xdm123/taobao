@@ -1,0 +1,27 @@
+/* components/Tabs/Tabs.wxss */
+.tabs_wrap {
+  display: flex;
+  width: 100%;
+}
+.titleItem {
+  flex: 1;
+  height: 110rpx;
+  /* display: flex; */
+  background-color: #161515;
+  text-align: center;
+}
+.active {
+  background-color:rgba(243, 141, 7);
+}
+
+.title{
+  color: #fff;
+  margin-top: 10rpx;
+}
+.desc{
+  /* border-radius: 30rpx;
+  border: 3rpx solid #fff; */
+  font-size: 25rpx;
+  margin-top: 5rpx;
+  color: #fff;
+}

@@ -1,0 +1,35 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/categary2/categary2",
+   
+    "pages/categary/categary",
+  
+    "pages/detail/detail"
+    
+  ],
+  "window":{
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "商品",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh":false
+ 
+  },
+  
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "首页",
+      "iconPath":"./img/home.png",
+      "selectedIconPath":"./img/home-selecetd.png"
+    }, {
+      "pagePath": "pages/categary/categary",
+      "text": "分类",
+      "iconPath":"./img/sort.png",
+      "selectedIconPath":"./img/sort-selected.png"
+    }]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

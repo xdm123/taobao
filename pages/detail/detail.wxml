@@ -1,0 +1,80 @@
+<view class="sort_ctn">
+  <!-- 左上角返回按钮 -->
+  <navigator open-type="navigateBack">
+    <image src="../../img/detail_exit.png" class="exit" bindtap="exit"></image>
+  </navigator>
+  <!-- 内容 -->
+  <!-- <scroll-view class="scroll-view_Y" scroll-y='true'> -->
+  <!-- <view class="swiper">
+      <swiper class="swiper" indicator-dots="true" autoplay="true" interval="3000" duration="1000" circular="true">
+        <block wx:for="{{detailData.small_images}}" wx:key="*this">
+          <swiper-item>
+            <image src="{{item}}" class="slide-image" />
+          </swiper-item>
+        </block>
+      </swiper>
+    </view> -->
+  <view>
+    <image src="{{detailData.pict_url}}" class="pict_image"></image>
+  </view>
+
+  <view class="desc_wrap">
+    <view class="price">
+      <view class="price_tag">¥</view>
+      <view class="the_final_price">
+        {{detailData.zk_final_price}}
+      </view>
+      <view class="reserve_price"> ¥{{detailData.reserve_price}}</view>
+    </view>
+    <view class="volume">已售：{{detailData.volume}}件</view>
+    <view class="title">{{detailData.title}}</view>
+  </view>
+  <view class="nick_cont_wrap">
+    <view class="bg_bar"></view>
+    <view class="nick_wrap">
+      <view class="icon_wrap">
+        <image class="nick_icon" src="{{detailData.localIcon}}"></image>
+      </view>
+      <view class="nick">{{detailData.nick}}</view>
+    </view>
+    <view class="bg_bar"></view>
+  </view>
+  <view class="text_wrap">
+    <view class="text_bar"></view>
+    <view class="text_tag">宝贝详情</view>
+  </view>
+  <view class="images_wrap">
+    <block wx:for="{{detailData.small_images}}" wx:key="*this">
+      <image src="{{item}}" class="detail_image" />
+    </block>
+  </view>
+  <!-- </scroll-view> -->
+  <!-- 底部定位bar -->
+  <view class="fixedShareBar">
+    <!-- 首页 -->
+    <view class="b-toIndex">
+      <view>
+        <navigator open-type="navigateBack">
+          <image class="toIndexImg" src="../../img/toIndexBtn.png"></image>
+        </navigator>
+      </view>
+      <view class="text_shouye">首页</view>
+    </view>
+    <!-- 分享券按钮 -->
+    <view class="share_wrap">
+      <view class="share" bindtap="toShare">立即分享</view>
+      <view class="buy" bindtap="toBuy">马上购买</view>
+    </view>
+    <!-- <button class="getCoupon" bindtap="getCoupon">弹出劵</button> -->
+  </view>
+
+
+  <view wx:if="{{isCouponShow}}" class="couponDialog" catchtouchmove="giogoio" bindtap="hiddenDialog">
+
+    <view class="dialogContent" catchtap="giaogiao">
+      <text class="pdd_share_tag">{{pdd_share_tag}}</text>
+    
+      <view>{{shareStr}}</view>
+    </view>
+  </view>
+</view>
