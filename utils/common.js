@@ -22,8 +22,8 @@ function getTBParams(p) {
     page: p.pageSize,
     num_iids: p.item_id,//查询商品详情使用
     //淘口令专用 text:字符必须大于5，url要转化为口令的目标链接
-    text:p.text,
-    url:p.url,
+    text: p.text,
+    url: p.url,
   };
   publicParams.sign = getSign(publicParams, app.tb_app_secret);//签名一定放在所有参数最下方
   return publicParams;
@@ -46,7 +46,7 @@ function getPDDParams(p) {
     limit: p.pageSize,
     goods_sign: p.goods_sign,//商品详情页-goods_sign
     offset: p.pageNo * p.pageSize,
-    p_id:p.p_id,//推广位id* 推广劵用
+    p_id: p.p_id,//推广位id* 推广劵用
   }
   publicParams.sign = getSign(publicParams, app.pdd_client_secret);//签名一定放在所有参数最下方
 
@@ -57,8 +57,14 @@ function getPDDParams(p) {
 param_json：请求参数，物料与详情页不同
   */
 function getJDParams(p) {
+  var new_param_json = ""
+  if (p.skuIds == null) {
+    new_param_json = JSON.stringify({ "goodsReq": { "eliteId": p.eliteId, "pageIndex": p.pageIndex, "pageSize": p.pageSize } })
+  } else {
+    new_param_json = JSON.stringify({ "goodsReq": { "eliteId": p.eliteId, "pageIndex": p.pageIndex, "pageSize": p.pageSize } })
+  }
   var publicParams = {
-    param_json: JSON.stringify({ "goodsReq": { "eliteId": p.eliteId, "pageIndex": p.pageIndex, "pageSize": p.pageSize, "skuIds": [p.skuIds] } }),
+    param_json: new_param_json,
     method: p.method,
     app_key: app.jd_appkey,
     timestamp: YYYYMMDDHHmmss(),
@@ -84,7 +90,7 @@ function getSign(params, url_secret) {
     basestring += k + params[k];
   }
   basestring += url_secret
-  //console.log("sign加密前:" + basestring)
+  console.log("sign加密前:" + basestring)
   var signStr = md5(basestring);
   signStr = signStr.toUpperCase();
   // console.log(basestring)
@@ -148,7 +154,7 @@ function packData(res, type) {
       oldList = res.data.goods_basic_detail_response.list
       break
     case 2:
-      var res = res.data.jd_union_open_goods_material_query_response.result
+      var res = res.data.jd_union_open_goods_jingfen_query_response.result
       oldList = JSON.parse(res).data
       break
   }
@@ -170,7 +176,7 @@ function packData(res, type) {
   return newList;
 }
 //淘宝自转
-function tb2(o){
+function tb2(o) {
   var data = {
     pict_url: o.pict_url,//列表缩略图
     title: o.title,//商品名字
@@ -180,19 +186,19 @@ function tb2(o){
     volume: o.volume,//已售
     item_id: o.item_id,//商品签名（目前只用于拼多多）
     small_images: o.small_images,//图片数组
-    coupon_click_url:encodeURIComponent("https:"+o.coupon_click_url),//淘口令链接*
-    localIcon:"../../img/nick_tb.png",//本地小图标，放在详情页-店铺前
+    coupon_click_url: encodeURIComponent("https:" + o.coupon_click_url),//淘口令链接*
+    localIcon: "../../img/nick_tb.png",//本地小图标，放在详情页-店铺前
   }
-  data.others=JSON.stringify(data)
+  data.others = JSON.stringify(data)
   //console.log("others:"+data.coupon_click_url)
   return data
 }
 //京东参数名转化成淘宝的参数名，统一参数名
 function jd2Tb(o) {
-  var imageList=[]
+  var imageList = []
   var i
-  for(i in o.imageInfo.imageList){
-    imageList[i]=o.imageInfo.imageList[i].url
+  for (i in o.imageInfo.imageList) {
+    imageList[i] = o.imageInfo.imageList[i].url
   }
   var data = {
     pict_url: o.imageInfo.imageList[0].url,//列表缩略图
@@ -203,10 +209,10 @@ function jd2Tb(o) {
     volume: o.inOrderCount30Days,//已售
     item_id: o.skuId,//商品签名（目前只用于拼多多）
     small_images: imageList,//图片数组
-    localIcon:"../../img/nick_jd.png",//本地小图标，放在详情页-店铺前
+    localIcon: "../../img/nick_jd.png",//本地小图标，放在详情页-店铺前
     // others:others
   }
-  data.others=JSON.stringify(data)//京东详情页传参
+  data.others = JSON.stringify(data)//京东详情页传参
   return data
 }
 //拼多多参数名转化成淘宝的参数名，统一参数名
@@ -227,9 +233,9 @@ function pdd2Tb(o) {
     volume: o.sales_tip,//已售
     item_id: o.goods_sign,//商品签名（目前只用于拼多多）
     small_images: o.goods_gallery_urls,//图片数组
-    localIcon:"../../img/nick_pdd.png",//本地小图标，放在详情页-店铺前
+    localIcon: "../../img/nick_pdd.png",//本地小图标，放在详情页-店铺前
   }
-  data.others=JSON.stringify(data)
+  data.others = JSON.stringify(data)
   return data
 }
 
@@ -241,5 +247,5 @@ module.exports = {
   packData: packData,
   pddToTb: pdd2Tb,
   getJDParams: getJDParams,
-  jdToTb:jd2Tb,
+  jdToTb: jd2Tb,
 }

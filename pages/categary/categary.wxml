@@ -1,7 +1,8 @@
-<view>
-  <button bindtap="clickTb" size="mini">淘宝</button>
-  <button bindtap="clickPdd" size="mini">拼多多</button>
-  <button bindtap="clickJd" size="mini">京东</button>
+<view class="platformBtns">
+  <view wx:for="{{platformBtns}}" wx:key="index" data-id="{{item.id}}" bindtap="platformClick"
+    class="normalBtn {{item.isActive?'active':''}}">
+    {{item.name}}
+  </view>
 </view>
 <view class="tabbar_wrap">
   <scroll-view class="scroll-view_H" scroll-x='true' scroll-with-animation='true' enable-back-to-top='true'
@@ -14,7 +15,6 @@
   </scroll-view>
 </view>
 <view class="sort_ctn">
-
   <scroll-view class="scroll-view_Y" scroll-y='true' bindscrolltolower='loaddata'>
     <view wx:for='{{goodsList}}' wx:key='index' class='goodslistwrap'>
       <view class='goods_pic_wrap'>

@@ -1,40 +1,59 @@
 /* pages/categary/categary.wxss */
-page{
+page {
   height: 100%;
 }
-.tabbar_wrap{
 
-  height:100rpx;
-  width:100%;
-  position: fixed;
-  top:100;
-  left:0;
+.platformBtns view {
+  display: inline-block;
+  width: 200rpx;
+  padding: 20rpx 0; 
+  text-align: center;
+  border-radius: 20rpx;
+  margin-left: 20rpx;
 }
-.contain{
+.normalBtn{
+  background-color: slategrey;
+}
+.active{
+  background-color: blue;
+}
+.tabbar_wrap {
+  height: 100rpx;
+  width: 100%;
+  position: fixed;
+  top: 100;
+  left: 0;
+}
+
+.contain {
   margin-top: 100rpx;
 }
-.scroll-view_H{
+
+.scroll-view_H {
   white-space: nowrap;
-  width:100%;
+  width: 100%;
 }
 
-.tabbar_wrap .scroll-view_H .scroll-item{
-  margin:0 20rpx;
-  height:80rpx;
+.tabbar_wrap .scroll-view_H .scroll-item {
+  margin: 0 20rpx;
+  height: 80rpx;
   display: inline-block;
   line-height: 80rpx;
 }
-.cur{
+
+.cur {
   border-bottom: 8rpx solid orange;
 }
-.sort_ctn{
+
+.sort_ctn {
   position: fixed;
-  top:100rpx;
+  top: 100rpx;
   bottom: 0;
-  width:100%;
+  width: 100%;
   /* background:#f2f2f2; */
 }
-.scroll-view_Y{
+
+.scroll-view_Y {
   margin-top: 100rpx;
-  height:100%;
+  height: 100%;
 }

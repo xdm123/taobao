@@ -70,14 +70,14 @@ Page({
     floatAreaTop: 0,
     isShowFloat: false,
     //上一次点击的titleBar
-    last_title_index: 0,//默认淘宝 0:淘宝，1:拼多多，2:京东
+    last_platform_type: 0,//默认淘宝 0:淘宝，1:拼多多，2:京东
     materialId: "28026",//淘宝默认 
     isNewType: false,//是否点击切换平台
   },
-  //titleBar点击事件
+  //平台分类点击事件
   handleItemChange(e) {
     const { index } = e.detail
-    if (this.data.last_title_index == index) {
+    if (this.data.last_platform_type == index) {
       return
     } else {
       this.getGoodsList(index)
@@ -85,7 +85,7 @@ Page({
         pageno: 1,
         pagesize: 20,
 
-        last_title_index: index,
+        last_platform_type: index,
         isNewType: true,
       })
     }
@@ -97,8 +97,8 @@ Page({
 
   onLoad: function () {
     //获取数据列表
-    //console.log(this.data.last_title_index)
-    this.getGoodsList(this.data.last_title_index)
+    //console.log(this.data.last_platform_type)
+    this.getGoodsList(this.data.last_platform_type)
     //计算什么滑动多长距离开始悬停
     this.countXuanTing()
   },
@@ -203,7 +203,7 @@ Page({
     this.setData({
       pageno: pageNo
     })
-    this.getGoodsList(this.data.last_title_index)
+    this.getGoodsList(this.data.last_platform_type)
     console.log(pageNo)
   },
 })

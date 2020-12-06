@@ -36,7 +36,7 @@
   <!-- 内容 -->
   <view class="{{isShowFloat?'D-margin-top':'S-margin-top'}}">
     <navigator wx:for='{{goodsList}}' wx:key='index' class='goodslistwrap'
-      url="/pages/detail/detail?item_id={{item.item_id}}&platform_type={{last_title_index}}&others={{item.others}}">
+      url="/pages/detail/detail?item_id={{item.item_id}}&platform_type={{last_platform_type}}&others={{item.others}}">
       <view class='goods_pic_wrap'>
         <image lazy-load="true" class='goods_pic' src="{{item.pict_url}}"></image>
       </view>

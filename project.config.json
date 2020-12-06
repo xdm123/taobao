@@ -33,14 +33,13 @@
     "useIsolateContext": true,
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": false,
-    "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.13.1",
-  "appid": "wx584abdcb6e848d0f",
+  "appid": "wx5448536d372b2719",
   "projectname": "wxapp_test",
   "debugOptions": {
     "hidedInDevtools": []
