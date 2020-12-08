@@ -183,16 +183,19 @@ function tb2(o) {
     nick: o.nick,//商家
     reserve_price: o.reserve_price,//原价
     zk_final_price: o.zk_final_price,//最终价格
-    volume: o.volume,//已售
+    volume: getVolume(o.volume),//已售
     item_id: o.item_id,//商品签名（目前只用于拼多多）
     small_images: o.small_images,//图片数组
     coupon_click_url: encodeURIComponent("https:" + o.coupon_click_url),//淘口令链接*
     localIcon: "../../img/nick_tb.png",//本地小图标，放在详情页-店铺前
+    titleIcon:"../../img/goods_title_tb.png"//放在商品title前
+
   }
   data.others = JSON.stringify(data)
   //console.log("others:"+data.coupon_click_url)
   return data
 }
+
 //京东参数名转化成淘宝的参数名，统一参数名
 function jd2Tb(o) {
   var imageList = []
@@ -206,10 +209,11 @@ function jd2Tb(o) {
     nick: o.shopInfo.shopName,//商家
     reserve_price: o.priceInfo.price,//原价
     zk_final_price: o.priceInfo.lowestCouponPrice == null ? o.priceInfo.lowestPrice : o.priceInfo.lowestCouponPrice,//最终价格
-    volume: o.inOrderCount30Days,//已售
+    volume: getVolume(o.inOrderCount30Days),//已售
     item_id: o.skuId,//商品签名（目前只用于拼多多）
     small_images: imageList,//图片数组
     localIcon: "../../img/nick_jd.png",//本地小图标，放在详情页-店铺前
+    titleIcon:"../../img/goods_title_jd.png"//放在商品title前
     // others:others
   }
   data.others = JSON.stringify(data)//京东详情页传参
@@ -219,10 +223,10 @@ function jd2Tb(o) {
 function pdd2Tb(o) {
   //计算最终价格
   var final_price = (o.min_group_price - o.coupon_discount) / 100
-  final_price = final_price.toFixed(2)
-  //计算原价并保留两位小数
+  final_price = parseFloat(final_price.toFixed(2))
+  //计算原价并保留两位小数 parseFloat:小数后是0 的话直接去除0
   var reserve_price = o.min_group_price / 100
-  reserve_price = reserve_price.toFixed(2)
+  reserve_price = parseFloat(reserve_price.toFixed(2))
 
   var data = {
     pict_url: o.goods_thumbnail_url,//列表缩略图
@@ -234,9 +238,24 @@ function pdd2Tb(o) {
     item_id: o.goods_sign,//商品签名（目前只用于拼多多）
     small_images: o.goods_gallery_urls,//图片数组
     localIcon: "../../img/nick_pdd.png",//本地小图标，放在详情页-店铺前
+    titleIcon:"../../img/goods_title_pdd.png"//放在商品title前
   }
   data.others = JSON.stringify(data)
   return data
+}
+//淘宝，京东的销售数量改为拼多多的格式
+function getVolume(sum){
+  var sumVolume = ""
+  //对销售总数进行拼多多格式转化
+  if (sum >= 100 * 1000) {
+    sumVolume = "10万+"
+  } else if (10 * 1000 < sum && sum < 100 * 1000) {
+    sumVolume = (sum / (10 * 1000)).toFixed(1) + "万"
+  } else {
+    sumVolume = sum + ""
+  }
+  //console.log("原型：" + sum + ",转化后：" + sumVolume)
+  return sumVolume
 }
 
 module.exports = {

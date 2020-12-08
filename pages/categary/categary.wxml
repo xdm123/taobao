@@ -16,16 +16,21 @@
 </view>
 <view class="sort_ctn">
   <scroll-view class="scroll-view_Y" scroll-y='true' bindscrolltolower='loaddata'>
-    <navigator wx:for='{{goodsList}}' wx:key='index' class='goodslistwrap' url="/pages/detail/detail?item_id={{item.item_id}}&platform_type={{last_platform_type}}&others={{item.others}}">
-      <view class='goods_pic_wrap'
-        >
+    <navigator wx:for='{{goodsList}}' wx:key='index' class='goodslistwrap'
+      url="/pages/detail/detail?item_id={{item.item_id}}&platform_type={{last_platform_type}}&others={{item.others}}">
+      <view class='goods_pic_wrap'>
         <image lazy-load="true" class='goods_pic' src="{{item.pict_url}}"></image>
       </view>
       <view class='goods_title'>{{item.title}}</view>
-      <view class="goods_shopname">{{item.nick}}</view>
-      <view class="goods_price">
+      <view class="goods_shopname_wrap">
+        <image src="{{item.titleIcon}}" class="goods_shop_icon"></image>
+        <view class="goods_shopname">{{item.nick}}</view>
+      </view>
+      <view class="goods_reserve_price">
         <view>原价:</view>
         <view>￥{{item.reserve_price}}</view>
+      </view>
+      <view class="goods_zk_final_price">
         <view class='final_price'>券后价:</view>
         <view>￥{{item.zk_final_price}}</view>
       </view>

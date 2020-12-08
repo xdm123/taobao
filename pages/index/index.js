@@ -52,14 +52,14 @@ Page({
       pic: "../../img/banners/banner1.jpg",
       url: "https://u.jd.com/t9zfzYC"
     }, {
-      pic:"../../img/banners/banner2.jpg",
-      url:"https://u.jd.com/tizFVr9"
-    },{
-      pic:"../../img/banners/banner3.jpg",
-      url:"https://u.jd.com/tOzxd4b"
-    },{
-      pic:"../../img/banners/banner4.jpg",
-      url:"https://u.jd.com/t9zk8Di"
+      pic: "../../img/banners/banner2.jpg",
+      url: "https://u.jd.com/tizFVr9"
+    }, {
+      pic: "../../img/banners/banner3.jpg",
+      url: "https://u.jd.com/tOzxd4b"
+    }, {
+      pic: "../../img/banners/banner4.jpg",
+      url: "https://u.jd.com/t9zk8Di"
     }],
     //商品列表
     goodsList: [],
@@ -149,7 +149,8 @@ Page({
         url_base = app.pdd_url_base
         break
       case 2:
-        params = common.getJDParams({ eliteId: 1, method: app.jd_url_material, pageIndex: _this.data.pageno, pageSize: _this.data.pagesize })
+        //定义初始化参数-eliteId: "22"，jd-实时热销
+        params = common.getJDParams({ eliteId: 22, method: app.jd_url_material, pageIndex: _this.data.pageno, pageSize: _this.data.pagesize })
         url_base = app.jd_url_base
         break
     }

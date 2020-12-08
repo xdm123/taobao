@@ -1,6 +1,7 @@
 /* pages/categary/categary.wxss */
 page {
   height: 100%;
+  background-color: #efefef;
 }
 
 .platformBtns view {
