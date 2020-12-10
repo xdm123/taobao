@@ -9,33 +9,122 @@ Page({
   data: {
     detailData: {
 
-
     },
     item_id: 0,
-    platform_type: 0,
+    platform_type: 0,//平台分类类型
     item_url: "",
-    shareStr: "",
-    isCouponShow: false,
-    pdd_share_tag: "",
+    shareStr: "",//分享的实际链接
+    isCouponShow: false,//是否显示分享对话框
+    pdd_share_tag: "",//分享内容前缀，自己编辑的
+    mini_app_path: "",//跳转目标小程序的路径wx_app_url
+    tb_password_simple: "",//淘宝的淘口令，用于打开淘宝app定位的优惠劵页面啊
+    is_tb_tkl_dialogShow: false,//淘宝专用，是否显示淘口令对话框
+    materialUrl: "",//京东专用，请求券链接的一个参数
+    couponUrl: "",//京东专用，用于分享券
+    pdd_search_id: "",//pdd专用
+    item_name: "",//分享好友是使用
+    user_name: "",//分享好友使用,用户昵称
+    pict_url:"",//分享朋友圈专用，商品页缩略图
+    coupon_dialog_btns: [
+      { name: "复制链接", id: 0, img: "../../img/chaoliu.jpg" },
+      { name: "分享好友", id: 1, img: "../../img/chaoliu.jpg" },
+      { name: "分享海报", id: 2, img: "../../img/chaoliu.jpg" },
+    ]
   },
-  //点击分享
+  //获取授权信息
+  getAuthInfo() {
+    var _this = this
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting && res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          wx.getUserInfo({
+            success: function (data) {
+              console.log(data.userInfo);
+              _this.setData({
+                user_name: data.userInfo.nickName
+              })
+            }
+          });
+        } else {
+          this.showShouquan = true; // 打开模态框进行授权
+        }
+      }
+    })
+  },
+  //分享好友
+  onShareAppMessage(options) {
+    this.hiddenDialog()
+    return {
+      title: this.data.user_name + "推荐" + this.data.item_name,
+    }
+   
+  },
+  //分享朋友圈
+  onShareTimeline(){
+    var pict_url=this.data.pict_url
+    return {
+      title: this.data.user_name + "推荐" + this.data.item_name,
+      imageUrl:pict_url.indexOf("http")==-1?"https:"+pict_url:pict_url
+    }
+  },
+  //复制链接按钮点击事件
+  clipboardData: function (e) {
+    var _this=this
+    wx.setClipboardData({
+      data: this.data.pdd_share_tag + this.data.shareStr,
+      success: function (res) {
+        wx.getClipboardData({
+          success: function (res) {
+            wx.showToast({
+              title: '复制成功'
+            })
+            _this.hiddenDialog()
+          }
+        })
+      }
+    })
+  },
+
+  //立即分享
   toShare: function () {
-    this.getCoupon()
+    //console.log("点击分享")
+    this.getCoupon(0)
   },
+  //马上购买。跳转小程序
+  toBuy: function () {
+    this.getCoupon(1)
+  },
+  //隐藏任何对话框
   hiddenDialog: function () {
     this.setData({
-      isCouponShow: false
+      isCouponShow: false,
+      is_tb_tkl_dialogShow: false
     })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.getAuthInfo()
     console.log(options)
     const { item_id } = options//详细商品id
     const { platform_type } = options//平台类型
     const { others } = options
-    var item = JSON.parse(others)
+    var jsonStr
+    /* 
+    通过右上角的分享好友，打开链接后others中的链接数据会被encode，
+    所以这里添加了decode的过程
+     */
+    if(others.indexOf("}")==-1){
+      jsonStr=decodeURIComponent(others)
+      //console.log("转化后jsonStr:"+jsonStr)
+    }else{
+      //console.log("未转化")
+      jsonStr=others
+    }
+    var item = JSON.parse(jsonStr)
+
     switch (parseInt(platform_type)) {
       case 0:
         this.setData({
@@ -44,23 +133,34 @@ Page({
         break
       case 1:
         this.setData({
-          pdd_share_tag: item.title + '\n'+"【原价】" + item.reserve_price + '\n'+"【劵后价】" + item.zk_final_price
+          pdd_search_id: item.searchId,
+          pdd_share_tag: item.title + '\n' + "【原价】" + item.reserve_price + '\n' + "【劵后价】" + item.zk_final_price
         })
         break
-      // default:
-        
-      //   break
+      case 2:
+        this.setData({
+          pdd_share_tag: item.title + '\n' + "【原价】" + item.reserve_price + '\n' + "【劵后价】" + item.zk_final_price,
+          item_url: decodeURIComponent(item.coupon_click_url),
+        })
+        break
     }
+
     this.setData({
       item_id: item_id,
       platform_type: platform_type,
+      item_name: item.title,
+      pict_url:item.pict_url,
     })
-
     //console.log("others:" + others)
-    this.getGoodsList(others)
+    this.getGoodsList(jsonStr)
+
   },
-  //获取优惠劵链接
-  async getCoupon() {
+  /*获取优惠劵链接
+  getType:
+  0:立即分享
+  1:马上购买
+    */
+  async getCoupon(getType) {
     var _this = this;
     var params;
     var url_base;
@@ -70,11 +170,11 @@ Page({
         url_base = app.tb_url_base
         break
       case 1:
-        params = common.getPDDParams({ method: app.pdd_url_coupon, p_id: app.pdd_p_id, goods_sign: _this.data.item_id });
+        params = common.getPDDParams({ method: app.pdd_url_coupon, p_id: app.pdd_p_id, goods_sign: _this.data.item_id, generate_we_app: true, search_id: _this.data.pdd_search_id });
         url_base = app.pdd_url_base
         break
       case 2:
-        params = common.getJDParams({ method: app.jd_url_detail, skuIds: _this.data.item_id });
+        params = common.getJDParams({ method: app.jd_url_coupon, materialId: _this.data.materialUrl, siteId: app.jd_appid, couponUrl: _this.data.item_url });
         url_base = app.jd_url_base
         break
     }
@@ -85,37 +185,74 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-
       success(res) {
         var shareStr;
+        var app_path;
         switch (parseInt(_this.data.platform_type)) {
           case 0:
             shareStr = res.data.data.model
-            break
+            var password_simple = res.data.data.password_simple
+            console.log("tb_password_simple:"+password_simple)
+            _this.setData({
+              tb_password_simple: password_simple,
+            })
+            break//淘宝的话，直接结束
           case 1:
-            shareStr = "【推广链接】"+res.data.goods_promotion_url_generate_response.goods_promotion_url_list[0].short_url
+            var obj = res.data.goods_promotion_url_generate_response.goods_promotion_url_list[0]
+            shareStr = "【推广链接】" + obj.short_url
+            app_path = obj.we_app_info.page_path
             break
           case 2:
-            var jdItem = JSON.parse(others)
-            _this.setData({
-              detailData: jdItem
-            })
+            shareStr = "【推广链接】" + _this.data.item_url//妈的找不到短链
+            var jsonStr = res.data.jd_union_open_promotion_common_get_response.result
+            var jsonObj = JSON.parse(jsonStr)
+            var clickUrlStr = jsonObj.data.clickURL
+            app_path = "pages/union/proxy/proxy?spreadUrl=" + encodeURIComponent(clickUrlStr) + "&appid=" + app.my_wx_appid
             break
         }
-        wx.hideLoading({
-          success: (res) => {
+
+        switch (getType) {
+          case 0:
             _this.setData({
               shareStr: shareStr,
               isCouponShow: true,
             })
-          },
-        })
+            break
+          case 1:
+            _this.jumpToMiniApp(app_path)
+            break
+        }
       },
       fail(res) {
         //console.log(res)
       }, complete(res) {
         console.log(res)
       }
+    })
+  },
+  //pdd & jd 跳转到小程序
+  jumpToMiniApp(app_path) {
+    var appid = ""
+    switch (parseInt(this.data.platform_type)) {
+      /*  淘宝没有微信小程序
+      弹出居中对齐的淘口令
+      使用方法：复制淘口令（password_simple）打开淘宝的方式*/
+      case 0:
+        this.setData({
+          is_tb_tkl_dialogShow: true
+        })
+        return //***********弹出对话框拉倒
+      case 1:
+        appid = app.pdd_mini_appid
+        break
+      case 2:
+        appid = app.jd_mini_appid
+        break
+    }
+    console.log("跳转小程序的appId:" + appid + ",path:" + app_path)
+    wx.navigateToMiniProgram({
+      appId: appid,
+      path: app_path,
     })
   },
   async getGoodsList(others) {
@@ -137,6 +274,14 @@ Page({
       case 2:
         params = common.getJDParams({ method: app.jd_url_detail, skuIds: _this.data.item_id });
         url_base = app.jd_url_base
+
+        // wx.hideLoading({
+        //   success: (res) => {
+
+        //   },
+        // })
+        // params = common.getJDParams({ method: app.jd_url_detail, skuIds: _this.data.item_id });
+        // url_base = app.jd_url_base
         break
     }
     wx.request({
@@ -164,8 +309,12 @@ Page({
             })
             break
           case 2:
+            var jsonStr = res.data.jd_union_open_goods_promotiongoodsinfo_query_response.result
+            var jsonObj = JSON.parse(jsonStr)
+            var materialUrl = jsonObj.data[0].materialUrl
             var jdItem = JSON.parse(others)
             _this.setData({
+              materialUrl: materialUrl,
               detailData: jdItem
             })
             break

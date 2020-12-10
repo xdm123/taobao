@@ -1,7 +1,7 @@
 <view class="sort_ctn">
   <!-- 左上角返回按钮 -->
-  <navigator open-type="navigateBack">
-    <image src="../../img/detail_exit.png" class="exit" bindtap="exit"></image>
+  <navigator url="/pages/index/index" open-type="switchTab">
+    <image src="../../img/detail_exit.png" class="exit" ></image>
   </navigator>
   <!-- 内容 -->
   <!-- <scroll-view class="scroll-view_Y" scroll-y='true'> -->
@@ -54,7 +54,7 @@
     <!-- 首页 -->
     <view class="b-toIndex">
       <view>
-        <navigator open-type="navigateBack">
+        <navigator url="/pages/index/index" open-type="switchTab">
           <image class="toIndexImg" src="../../img/toIndexBtn.png"></image>
         </navigator>
       </view>
@@ -68,13 +68,26 @@
     <!-- <button class="getCoupon" bindtap="getCoupon">弹出劵</button> -->
   </view>
 
-
+  <!-- 分享劵 -->
   <view wx:if="{{isCouponShow}}" class="couponDialog" catchtouchmove="giogoio" bindtap="hiddenDialog">
+    <view class="dialogContent" catchtap="gggiao">
+      <view class="shareContent">
+        <text class="pdd_share_tag" wx:if="{{isCouponShow}}">{{pdd_share_tag}}</text>
+        <view class="shareStr">{{shareStr}}</view>
+      </view>
+      <!-- 按钮栏 -->
+      <view class="btns_wrap">
+        <button class='share_friend_button' bindtap="clipboardData">复制链接</button>
+        <button class='share_friend_button' open-type='share'>分享好友</button>
+        <button class='share_friend_button' open-type='share'>分享海报</button>
+      </view>
+    </view>
+  </view>
+  <!-- 淘宝专用-淘口令 -->
+  <view wx:if="{{is_tb_tkl_dialogShow}}" class="tbk_bg" catchtouchmove="giogoio" bindtap="hiddenDialog">
 
-    <view class="dialogContent" catchtap="giaogiao">
-      <text class="pdd_share_tag">{{pdd_share_tag}}</text>
-    
-      <view>{{shareStr}}</view>
+    <view class="tbk_content" catchtap="giaogiao">
+      <text class="pdd_share_tag">{{tb_password_simple}}</text>
     </view>
   </view>
 </view>

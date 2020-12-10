@@ -47,6 +47,8 @@ function getPDDParams(p) {
     goods_sign: p.goods_sign,//商品详情页-goods_sign
     offset: p.pageNo * p.pageSize,
     p_id: p.p_id,//推广位id* 推广劵用
+    generate_we_app: p.generate_we_app,//推广链接使用，获取小程序跳转目标url
+    search_id:p.search_id//推广链接使用，提高收益
   }
   publicParams.sign = getSign(publicParams, app.pdd_client_secret);//签名一定放在所有参数最下方
 
@@ -58,10 +60,14 @@ param_json：请求参数，物料与详情页不同
   */
 function getJDParams(p) {
   var new_param_json = ""
-  if (p.skuIds == null) {
-    new_param_json = JSON.stringify({ "goodsReq": { "eliteId": p.eliteId, "pageIndex": p.pageIndex, "pageSize": p.pageSize } })
-  } else {
-    new_param_json = JSON.stringify({ "goodsReq": { "eliteId": p.eliteId, "pageIndex": p.pageIndex, "pageSize": p.pageSize } })
+  if(p.siteId==null){
+    if (p.skuIds == null) {
+      new_param_json = JSON.stringify({ "goodsReq": { "eliteId": p.eliteId, "pageIndex": p.pageIndex, "pageSize": p.pageSize } })
+    } else {
+      new_param_json = JSON.stringify({ "skuIds": p.skuIds })
+    }
+  }else{
+    new_param_json = JSON.stringify({ "promotionCodeReq": { "siteId": p.siteId, "materialId": p.materialId,"couponUrl":p.couponUrl } })
   }
   var publicParams = {
     param_json: new_param_json,
@@ -184,39 +190,14 @@ function tb2(o) {
     reserve_price: o.reserve_price,//原价
     zk_final_price: o.zk_final_price,//最终价格
     volume: getVolume(o.volume),//已售
-    item_id: o.item_id,//商品签名（目前只用于拼多多）
+    item_id: o.item_id,//商品签名
     small_images: o.small_images,//图片数组
-    coupon_click_url: encodeURIComponent("https:" + o.coupon_click_url),//淘口令链接*
+    coupon_click_url: encodeURIComponent("https:" + o.coupon_share_url),//淘口令链接*
     localIcon: "../../img/nick_tb.png",//本地小图标，放在详情页-店铺前
-    titleIcon:"../../img/goods_title_tb.png"//放在商品title前
-
+    titleIcon: "../../img/goods_title_tb.png"//放在商品title前
   }
   data.others = JSON.stringify(data)
   //console.log("others:"+data.coupon_click_url)
-  return data
-}
-
-//京东参数名转化成淘宝的参数名，统一参数名
-function jd2Tb(o) {
-  var imageList = []
-  var i
-  for (i in o.imageInfo.imageList) {
-    imageList[i] = o.imageInfo.imageList[i].url
-  }
-  var data = {
-    pict_url: o.imageInfo.imageList[0].url,//列表缩略图
-    title: o.skuName,//商品名字
-    nick: o.shopInfo.shopName,//商家
-    reserve_price: o.priceInfo.price,//原价
-    zk_final_price: o.priceInfo.lowestCouponPrice == null ? o.priceInfo.lowestPrice : o.priceInfo.lowestCouponPrice,//最终价格
-    volume: getVolume(o.inOrderCount30Days),//已售
-    item_id: o.skuId,//商品签名（目前只用于拼多多）
-    small_images: imageList,//图片数组
-    localIcon: "../../img/nick_jd.png",//本地小图标，放在详情页-店铺前
-    titleIcon:"../../img/goods_title_jd.png"//放在商品title前
-    // others:others
-  }
-  data.others = JSON.stringify(data)//京东详情页传参
   return data
 }
 //拼多多参数名转化成淘宝的参数名，统一参数名
@@ -238,13 +219,40 @@ function pdd2Tb(o) {
     item_id: o.goods_sign,//商品签名（目前只用于拼多多）
     small_images: o.goods_gallery_urls,//图片数组
     localIcon: "../../img/nick_pdd.png",//本地小图标，放在详情页-店铺前
-    titleIcon:"../../img/goods_title_pdd.png"//放在商品title前
+    titleIcon: "../../img/goods_title_pdd.png",//放在商品title前
+    searchId:o.search_id,//推广链接专用，提高收益
   }
   data.others = JSON.stringify(data)
   return data
 }
+
+//京东参数名转化成淘宝的参数名，统一参数名
+function jd2Tb(o) {
+  var imageList = []
+  var i
+  for (i in o.imageInfo.imageList) {
+    imageList[i] = o.imageInfo.imageList[i].url
+  }
+  var data = {
+    pict_url: o.imageInfo.imageList[0].url,//列表缩略图
+    title: o.skuName,//商品名字
+    nick: o.shopInfo.shopName,//商家
+    reserve_price: o.priceInfo.price,//原价
+    zk_final_price: o.priceInfo.lowestCouponPrice == null ? o.priceInfo.lowestPrice : o.priceInfo.lowestCouponPrice,//最终价格
+    volume: getVolume(o.inOrderCount30Days),//已售
+    item_id: o.skuId,//商品签名 
+    small_images: imageList,//图片数组
+    localIcon: "../../img/nick_jd.png",//本地小图标，放在详情页-店铺前
+    titleIcon: "../../img/goods_title_jd.png",//放在商品title前
+    coupon_click_url: encodeURIComponent(o.couponInfo.couponList[0].link)//coupon_link
+    // others:others
+  }
+  data.others = JSON.stringify(data)//京东详情页传参
+  return data
+}
+
 //淘宝，京东的销售数量改为拼多多的格式
-function getVolume(sum){
+function getVolume(sum) {
   var sumVolume = ""
   //对销售总数进行拼多多格式转化
   if (sum >= 100 * 1000) {

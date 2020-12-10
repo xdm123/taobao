@@ -1,33 +1,37 @@
 {
-  "pages":[
+  "pages": [
+   
     "pages/index/index",
     "pages/categary/categary",
     "pages/categary2/categary2",
     "pages/detail/detail"
-    
+
   ],
-  "window":{
+  "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "商品",
     "navigationBarTextStyle": "black",
-    "enablePullDownRefresh":false
- 
+    "enablePullDownRefresh": false
+
   },
-  
+
   "tabBar": {
     "list": [{
       "pagePath": "pages/index/index",
       "text": "首页",
-      "iconPath":"./img/home.png",
-      "selectedIconPath":"./img/home-selecetd.png"
+      "iconPath": "./img/home.png",
+      "selectedIconPath": "./img/home-selecetd.png"
     }, {
       "pagePath": "pages/categary/categary",
       "text": "分类",
-      "iconPath":"./img/sort.png",
-      "selectedIconPath":"./img/sort-selected.png"
+      "iconPath": "./img/sort.png",
+      "selectedIconPath": "./img/sort-selected.png"
     }]
   },
+  "navigateToMiniProgramAppIdList": [
+    "wx32540bd863b27570","wx91d27dbf599dff74"
+  ],
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }
