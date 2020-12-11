@@ -1,7 +1,7 @@
 <view class="sort_ctn">
   <!-- 左上角返回按钮 -->
   <navigator url="/pages/index/index" open-type="switchTab">
-    <image src="../../img/detail_exit.png" class="exit" ></image>
+    <image src="../../img/detail_exit.png" class="exit"></image>
   </navigator>
   <!-- 内容 -->
   <!-- <scroll-view class="scroll-view_Y" scroll-y='true'> -->
@@ -29,14 +29,24 @@
     <view class="volume">已售：{{detailData.volume}}件</view>
     <view class="title">{{detailData.title}}</view>
   </view>
+  <view class="descBar" wx:if="{{detailData.descArr!=null}}">
+    <view class="shop_desc_wrap">
+      <block wx:for="{{detailData.descArr}}" wx:key="index">
+        <text wx:if="{{item!=null}}" class="shop_desc">{{item==null?"":item}}</text>
+      </block>
+    </view>
+  </view>
   <view class="nick_cont_wrap">
     <view class="bg_bar"></view>
     <view class="nick_wrap">
+
       <view class="icon_wrap">
         <image class="nick_icon" src="{{detailData.localIcon}}"></image>
       </view>
       <view class="nick">{{detailData.nick}}</view>
+
     </view>
+
     <view class="bg_bar"></view>
   </view>
   <view class="text_wrap">

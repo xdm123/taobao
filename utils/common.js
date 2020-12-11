@@ -221,6 +221,7 @@ function pdd2Tb(o) {
     localIcon: "../../img/nick_pdd.png",//本地小图标，放在详情页-店铺前
     titleIcon: "../../img/goods_title_pdd.png",//放在商品title前
     searchId:o.search_id,//推广链接专用，提高收益
+    descArr:o.unified_tags,//详情页专用，显示店铺评价
   }
   data.others = JSON.stringify(data)
   return data
@@ -244,8 +245,7 @@ function jd2Tb(o) {
     small_images: imageList,//图片数组
     localIcon: "../../img/nick_jd.png",//本地小图标，放在详情页-店铺前
     titleIcon: "../../img/goods_title_jd.png",//放在商品title前
-    coupon_click_url: encodeURIComponent(o.couponInfo.couponList[0].link)//coupon_link
-    // others:others
+    coupon_click_url: encodeURIComponent(o.couponInfo.couponList[0].link)//优惠劵链接
   }
   data.others = JSON.stringify(data)//京东详情页传参
   return data

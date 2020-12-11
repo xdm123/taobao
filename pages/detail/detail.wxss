@@ -2,6 +2,7 @@
 page {
   height: 100%;
 }
+
 /* 返回按钮 */
 .exit {
   width: 55rpx;
@@ -39,6 +40,7 @@ page {
   color: red;
   margin-left: 5rpx;
   font-size: 50rpx;
+  font-weight: 800;
 }
 
 .price_tag {
@@ -64,7 +66,7 @@ page {
 }
 
 .nick_cont_wrap {
-  margin-top: 15rpx;
+  margin-top: 25rpx;
 }
 
 .nick_wrap {
@@ -78,7 +80,7 @@ page {
 .bg_bar {
   width: 100%;
   height: 10rpx;
-  background-color: #cbcbcb;
+  background-color: #efefef;
 }
 
 .nick_icon {
@@ -91,6 +93,26 @@ page {
   /* height: 50rpx; */
   line-height: 100rpx;
   margin-left: 15rpx;
+}
+
+.descBar {
+  width: 100%;
+  height: 50rpx;
+}
+
+/* 详细描述 */
+.shop_desc_wrap {
+  position: absolute;
+  right: 45rpx;
+}
+
+.shop_desc {
+  padding: 5rpx 20rpx;
+  margin-left: 15rpx;
+  font-size: 22rpx;
+  color: #D0AC5E;
+  border: 3rpx solid #D0AC5E;
+  border-radius: 20rpx;
 }
 
 .text_tag {
@@ -117,13 +139,13 @@ page {
 
 /* 抬高imgesList列表 */
 .images_wrap {
-  margin-bottom: 100rpx;
+  margin-bottom: 120rpx;
 }
 
 /* 详情图 */
 .detail_image {
   width: 100%;
-  height: 620rpx;
+  height: 650rpx;
 }
 
 .fixedShareBar {
@@ -214,11 +236,12 @@ page {
   color: #898989;
   font-size: 24rpx;
 }
+
 /* 按钮们 */
-.btns_wrap buton{
- display: inline-block;
- width: 50rpx;
- margin-left: 30rpx;
+.btns_wrap buton {
+  display: inline-block;
+  width: 50rpx;
+  margin-left: 30rpx;
 }
 
 /* 淘宝专属-淘宝客对话框 */

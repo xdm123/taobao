@@ -1,6 +1,5 @@
 {
   "pages": [
-   
     "pages/index/index",
     "pages/categary/categary",
     "pages/categary2/categary2",
@@ -13,7 +12,6 @@
     "navigationBarTitleText": "商品",
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": false
-
   },
 
   "tabBar": {
